@@ -10,3 +10,13 @@ export const SignupSchema = z.object({
     .regex(/[a-z]/, "Must contain lowercase")
     .regex(/[0-9]/, "Must contain number")
 })
+
+
+export const SigninSchema = z.object({
+    username:z.string().min(4,"username must be 4 character atleast"),
+    password:z.string().min(8,"password must be atleast 8 character ")
+    .regex(/[A-Z]/, "Must contain uppercase")
+    .regex(/[a-z]/, "Must contain lowercase")
+    .regex(/[0-9]/, "Must contain number")
+    
+})
