@@ -21,7 +21,7 @@ firstname: string;
   }
   const hashedPassword = await bcrypt.hash(password,12)
 
-  
+
    const result = await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
       data: {
@@ -53,4 +53,34 @@ firstname: string;
 
 
 
+export const signin = async (data: {
+  username: string;
+  password: string;
+}) => {
+  const { username, password } = data;
 
+  // 1. Find user
+  const existingUser = await prisma.user.findUnique({
+    where: { username },
+  });
+
+  if (!existingUser) {
+    throw new Error("Invalid credentials");
+  }
+
+  // 2. Compare password
+  const isMatch = await bcrypt.compare(
+    password,
+    existingUser.password
+  );
+
+  if (!isMatch) {
+    throw new Error("Invalid credentials");
+  }
+
+  // 3. Return success (JWT next step)
+  return {
+    message: "Signin successful",
+    userId: existingUser.id,
+  };
+};
