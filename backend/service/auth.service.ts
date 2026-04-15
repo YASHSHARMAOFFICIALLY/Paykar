@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt"
 import prisma from "@/lib/prisma";
+import { signToken } from "@/lib/jwt";
 
 export const signup = async(data:{
 firstname: string;
@@ -78,9 +79,11 @@ export const signin = async (data: {
     throw new Error("Invalid credentials");
   }
 
+  const token = signToken(existingUser.id)
+
   // 3. Return success (JWT next step)
   return {
     message: "Signin successful",
-    userId: existingUser.id,
+     token,
   };
 };
