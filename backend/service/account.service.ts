@@ -1,11 +1,5 @@
 import prisma from "@/lib/prisma"
 
-// export const balance = (userId:string)=>{
-//     userId = userId prisma.user.findUnique({
-//          where: { username },
-//     })
-// }
-
 
 export const getbalance = async(userId:string)=>{
 
@@ -23,63 +17,81 @@ export const getbalance = async(userId:string)=>{
 }
 
 
-export const transfer = async(
-    fromUserId:string,
-    toUserId:string,
-    amount:number
-)=>{
-    
-    if(fromUserId === toUserId){
-        throw new Error("You cannot send money to your self")
-    }
 
-    if(amount <= 0){
-        throw new Error("Amount cannot be greater or less than zero")
-    }
-    const Receiver = await prisma.user.findUnique({
-        where:{id:toUserId}
-    })
+export const transfer = async (
+  fromUserId: string,
+  toUserId: string,
+  amount: number
+) => {
+  if (fromUserId === toUserId) {
+    throw new Error("You cannot send money to yourself");
+  }
 
-    if(!Receiver){
-        throw new Error("Account not found")
-    }
+  if (amount <= 0) {
+    throw new Error("Amount must be greater than zero");
+  }
 
-    const senderAccount = await prisma.account.findUnique({
-        where:{userId:fromUserId}
-    })
-    if(!senderAccount){
-        throw new Error("Sender Account Not found")
-    }
-    if(senderAccount.balance<amount){
-        throw new Error("Insufficient balance")
-    }
+  const receiver = await prisma.user.findUnique({
+    where: { id: toUserId },
+  });
 
-     await prisma.$transaction([
-    // Deduct from sender
-    prisma.account.update({
-      where: { userId: fromUserId },
+  if (!receiver) {
+    throw new Error("Receiver not found");
+  }
+
+  
+  await prisma.$transaction(async (tx) => {
+   
+    const senderUpdate = await tx.account.updateMany({
+      where: {
+        userId: fromUserId,
+        balance: {
+          gte: amount,
+        },
+      },
       data: {
         balance: {
           decrement: amount,
         },
       },
-    }),
+    });
 
-    // Add to receiver
-    prisma.account.update({
+    if (senderUpdate.count === 0) {
+     
+      await tx.transactions.create({
+        data: {
+          fromUserId,
+          toUserId,
+          amount,
+          status: "FAILED",
+        },
+      });
+
+      throw new Error("Insufficient balance");
+    }
+
+    
+    await tx.account.update({
       where: { userId: toUserId },
       data: {
         balance: {
           increment: amount,
         },
       },
-    }),
-  ]);
+    });
 
-  // 7. Return success
+    
+    await tx.transactions.create({
+      data: {
+        fromUserId,
+        toUserId,
+        amount,
+        status: "SUCCESS",
+      },
+    });
+  });
+
   return {
     message: "Transfer successful",
   };
-  
-    
-}
+};

@@ -33,3 +33,11 @@ model account {
   user     user   @relation(fields: [userId], references: [id], onDelete: Cascade)
  
 }
+model Transactions {
+  id         String   @id @default(uuid())
+  fromUserId String
+  toUserId   String
+  amount     Int
+  status     String
+  createdAt  DateTime @default(now())
+}
