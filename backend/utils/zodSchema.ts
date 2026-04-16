@@ -20,3 +20,9 @@ export const SigninSchema = z.object({
     .regex(/[0-9]/, "Must contain number")
     
 })
+
+
+export const TransferSchema = z.object({
+    toUserId:z.string().min(1,"Receiver Id is required"),
+    amount:z.number().positive("amount must be greater than 0"),
+})
