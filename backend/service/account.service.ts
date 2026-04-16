@@ -55,7 +55,7 @@ export const transfer = async(
     }
 
      await prisma.$transaction([
-    // Deduct from sender
+  
     prisma.account.update({
       where: { userId: fromUserId },
       data: {
@@ -65,7 +65,7 @@ export const transfer = async(
       },
     }),
 
-    // Add to receiver
+   
     prisma.account.update({
       where: { userId: toUserId },
       data: {
@@ -76,10 +76,9 @@ export const transfer = async(
     }),
   ]);
 
-  // 7. Return success
+ 
   return {
     message: "Transfer successful",
   };
   
-    
 }

@@ -1,6 +1,7 @@
 import { getUserFromToken } from "@/lib/auth";
 import { TransferSchema } from "@/utils/zodSchema";
-import { transfer } from "@/services/account.service";
+import { transfer } from  "@/service/account.service"
+
 
 export async function POST(req: Request) {
   try {
