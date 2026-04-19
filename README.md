@@ -1,124 +1,149 @@
 # Paykar
 
-Paykar is a hand-built full-stack wallet project with a Next.js frontend and a Next.js API backend. The backend already includes authentication, account creation, balance lookup, and user search. The frontend is set up as a separate Next.js app and is ready to be connected to the backend flows.
+<div align="center">
 
-The project is intentionally split into `frontend` and `backend` folders so the UI and API can evolve independently while still living in one repository.
+### 💸 A polished full-stack wallet experience built with Next.js, Prisma, PostgreSQL, and JWT authentication
 
-## Current Status
+Sign up, authenticate, search users, check balances, and send money through a clean split-architecture setup with a dedicated frontend and backend.
 
-| Area | Status |
-| --- | --- |
-| Frontend | Next.js app scaffold is ready |
-| Backend | Auth, account balance, and user search APIs are implemented |
-| Database | PostgreSQL schema and Prisma migration are present |
-| Payments | Transfer route exists but still needs full implementation |
+</div>
 
-## Features
+---
 
-### Backend
+## ✨ Overview
 
-- User signup with unique email and username checks
-- Password hashing with `bcrypt`
-- JWT-based signin with 7-day token expiry
-- Account creation during signup with a Prisma transaction
-- Authenticated balance lookup using `Authorization: Bearer <token>`
-- User search by username or first name
-- Request validation with Zod
-- PostgreSQL data model managed through Prisma
-- Service-layer structure for cleaner route handlers
+Paykar is a two-app full-stack wallet project designed around a simple but realistic payments flow:
+
+- `frontend/` delivers the landing page, auth experience, wallet dashboard, balance cards, and transfer UI.
+- `backend/` exposes the API layer for authentication, account management, search, and money transfers.
+
+The project is intentionally structured this way so the UI and API can evolve independently while staying in the same repository.
+
+## 🚀 What’s Built
 
 ### Frontend
 
-- Next.js App Router project structure
-- React 19 setup
-- Tailwind CSS setup
-- TypeScript and ESLint configuration
-- Ready for auth screens, dashboard, wallet balance, search, and transfer UI
+- Modern landing page with motion, theme toggle, and branded visual design
+- Dedicated sign-in and sign-up flows
+- Wallet dashboard with balance refresh
+- Receiver search with live query support
+- Quick transfer form with success and error feedback
+- Local frontend API routes that proxy requests to the backend
 
-## Tech Stack
+### Backend
 
-| Layer | Technology |
-| --- | --- |
-| Frontend | Next.js, React, TypeScript, Tailwind CSS |
-| Backend | Next.js API Routes, TypeScript |
-| Database | PostgreSQL |
-| ORM | Prisma |
-| Authentication | JWT |
-| Password Security | bcrypt |
-| Validation | Zod |
-| Tooling | npm, ESLint |
+- User registration with validation and duplicate checks
+- Password hashing with `bcrypt`
+- JWT-based authentication with 7-day expiry
+- Account creation inside a Prisma transaction during signup
+- Authenticated balance lookup
+- User search by username or first name
+- Transactional money transfer with insufficient-balance protection
+- Transaction logging for both successful and failed transfers
 
-## Repository Structure
+## 🧱 Architecture
 
 ```text
 paykar/
-+-- frontend/
-|   +-- app/
-|   +-- public/
-|   +-- package.json
-|   +-- tsconfig.json
-+-- backend/
-|   +-- app/
-|   |   +-- api/
-|   |   |   +-- account/
-|   |   |   +-- auth/
-|   |   |   +-- user/
-|   +-- lib/
-|   +-- prisma/
-|   +-- service/
-|   +-- utils/
-|   +-- package.json
-|   +-- tsconfig.json
+├── frontend/                # Next.js UI app
+│   ├── app/                 # App Router pages + proxy API routes
+│   ├── components/          # Landing, auth, dashboard, wallet UI
+│   ├── lib/                 # Backend URL + proxy helpers
+│   └── public/              # Fonts and visual assets
+├── backend/                 # Next.js API app
+│   ├── app/api/             # Route handlers
+│   ├── service/             # Business logic
+│   ├── lib/                 # Prisma, JWT, auth helpers
+│   ├── utils/               # Zod schemas
+│   └── prisma/              # Schema and migrations
+└── README.md
 ```
 
-## Backend Architecture
+### Request Flow
 
-The backend follows a simple production-style structure:
+1. The browser talks to the frontend app.
+2. The frontend proxies API requests to the backend.
+3. The backend validates input, authenticates users, and talks to PostgreSQL through Prisma.
+4. JWT tokens are stored client-side and sent as `Authorization: Bearer <token>` for protected actions.
 
-- `app/api`: HTTP route handlers
-- `service`: business logic
-- `lib`: shared helpers for Prisma, JWT, and auth
-- `utils`: validation schemas
-- `prisma`: database schema and migrations
+## 🛠 Tech Stack
 
-This keeps route files small and makes the backend easier to test and extend.
+| Layer | Stack |
+| --- | --- |
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS 4, Framer Motion |
+| Backend | Next.js 16 Route Handlers, TypeScript |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Auth | JWT |
+| Security | bcrypt |
+| Validation | Zod |
+| Tooling | ESLint, npm |
 
-## Database Model
+## 🎯 Product Flow
 
-### User
+Paykar currently supports this end-to-end journey:
+
+1. A user signs up with first name, last name, email, username, and password.
+2. The backend creates the user and automatically provisions an account with an initial balance.
+3. The user signs in and receives a JWT token.
+4. The wallet dashboard fetches the current balance using the token.
+5. The user searches recipients by username or first name.
+6. A transfer request moves funds atomically and records a transaction status.
+
+## 🗃 Database Model
+
+### `user`
 
 | Field | Type | Notes |
 | --- | --- | --- |
 | `id` | `String` | UUID primary key |
-| `firstname` | `String` | User first name |
-| `lastname` | `String` | User last name |
-| `email` | `String` | Unique email address |
-| `username` | `String` | Unique username |
-| `password` | `String` | Hashed password |
-| `createdat` | `DateTime` | Created timestamp |
+| `firstname` | `String` | Required |
+| `lastname` | `String` | Required |
+| `email` | `String` | Unique |
+| `username` | `String` | Unique |
+| `password` | `String` | Hashed before storage |
+| `createdat` | `DateTime` | Defaults to current timestamp |
 
-### Account
+### `account`
 
 | Field | Type | Notes |
 | --- | --- | --- |
 | `id` | `String` | UUID primary key |
-| `userId` | `String` | Unique user reference |
-| `balance` | `Int` | Wallet balance |
+| `userId` | `String` | Unique relation to user |
+| `balance` | `Int` | Current wallet balance |
 
-## Getting Started
+### `Transactions`
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `id` | `String` | UUID primary key |
+| `fromUserId` | `String` | Sender id |
+| `toUserId` | `String` | Receiver id |
+| `amount` | `Int` | Transfer amount |
+| `status` | `String` | `SUCCESS` or `FAILED` |
+| `createdAt` | `DateTime` | Defaults to current timestamp |
+
+## ⚙️ Local Setup
 
 ### Prerequisites
 
 - Node.js 20+
 - npm
-- PostgreSQL database
+- PostgreSQL
 
-### Backend Setup
+### 1. Install dependencies
 
 ```bash
 cd backend
 npm install
 ```
+
+```bash
+cd frontend
+npm install
+```
+
+### 2. Configure backend environment
 
 Create `backend/.env`:
 
@@ -127,51 +152,74 @@ DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
 JWT_SECRET="replace-with-a-long-random-secret"
 ```
 
-Run migrations and start the backend:
+### 3. Configure frontend environment
+
+The frontend proxies requests to the backend and defaults to `http://localhost:3001`.
+
+Create `frontend/.env.local` if you want to be explicit:
+
+```env
+NEXT_PUBLIC_PAYKAR_BACKEND_URL="http://localhost:3001"
+```
+
+### 4. Run Prisma migrations
 
 ```bash
+cd backend
 npx prisma migrate dev
-npm run dev
 ```
 
-The backend runs at:
+### 5. Start both apps
 
-```text
-http://localhost:3000
-```
-
-### Frontend Setup
-
-Open another terminal:
+Run the backend on `3001`:
 
 ```bash
-cd frontend
-npm install
-npm run dev
-```
-
-If the backend is already running on port `3000`, start the frontend on another port:
-
-```bash
+cd backend
 npm run dev -- -p 3001
 ```
 
-The frontend can run at:
+Run the frontend on `3000`:
 
-```text
-http://localhost:3001
+```bash
+cd frontend
+npm run dev
 ```
 
-## API Reference
+Open:
+
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:3001`
+
+## 🔐 Validation Rules
 
 ### Signup
 
-```http
-POST /api/auth/signup
-Content-Type: application/json
-```
+- `username` must be at least 4 characters
+- `firstname` must be at least 2 characters
+- `lastname` must be at least 2 characters
+- `email` must be valid
+- `password` must be at least 8 characters and include:
+  - uppercase letter
+  - lowercase letter
+  - number
 
-Request:
+### Signin
+
+- `username` must be at least 4 characters
+- `password` must satisfy the same password rules
+
+### Transfer
+
+- `toUserId` is required
+- `amount` must be a positive number
+
+## 📡 API Surface
+
+### `POST /api/auth/signup`
+
+Creates a user and associated account.
+
+Request body:
 
 ```json
 {
@@ -183,7 +231,7 @@ Request:
 }
 ```
 
-Response:
+Success response:
 
 ```json
 {
@@ -192,14 +240,11 @@ Response:
 }
 ```
 
-### Signin
+### `POST /api/auth/signin`
 
-```http
-POST /api/auth/signin
-Content-Type: application/json
-```
+Authenticates a user and returns a JWT.
 
-Request:
+Request body:
 
 ```json
 {
@@ -208,7 +253,7 @@ Request:
 }
 ```
 
-Response:
+Success response:
 
 ```json
 {
@@ -217,14 +262,17 @@ Response:
 }
 ```
 
-### Get Balance
+### `GET /api/account/balance`
+
+Returns the signed-in user balance.
+
+Headers:
 
 ```http
-GET /api/account/balance
 Authorization: Bearer <token>
 ```
 
-Response:
+Success response:
 
 ```json
 {
@@ -232,13 +280,11 @@ Response:
 }
 ```
 
-### Search Users
+### `GET /api/user/search?query=<term>`
 
-```http
-GET /api/user/search?query=yash
-```
+Searches users by `username` or `firstname`.
 
-Response:
+Success response:
 
 ```json
 [
@@ -251,117 +297,84 @@ Response:
 ]
 ```
 
-## Validation Rules
+### `POST /api/account/transfer`
 
-Signup requires:
+Transfers money from the authenticated sender to another user.
 
-- `username`: minimum 4 characters
-- `firstname`: minimum 2 characters
-- `lastname`: minimum 2 characters
-- `email`: valid email format
-- `password`: minimum 8 characters with uppercase, lowercase, and number
+Headers:
 
-Signin requires:
+```http
+Authorization: Bearer <token>
+Content-Type: application/json
+```
 
-- `username`: minimum 4 characters
-- `password`: minimum 8 characters with uppercase, lowercase, and number
+Request body:
 
-## Security Notes
+```json
+{
+  "toUserId": "receiver_uuid",
+  "amount": 1200
+}
+```
 
-- Passwords are hashed before storage.
-- JWT payload stores only the user id.
-- Protected routes use the `Authorization` header.
-- User and account creation happen inside one transaction.
-- Account records are linked to users with cascade delete.
+Success response:
 
-## Professional Features To Add
+```json
+{
+  "message": "Transfer successful"
+}
+```
 
-### Backend Improvements
+## 🎨 Frontend Notes
 
-1. Complete `POST /api/account/transfer`
+The frontend is not a placeholder anymore. It currently includes:
 
-   Add sender auth, receiver validation, amount validation, insufficient-balance checks, no self-transfer rule, and an atomic Prisma transaction.
+- a branded landing page
+- custom font usage
+- motion-based reveal interactions
+- dark mode support
+- auth screens
+- wallet dashboard and transfer modules
 
-2. Add a transaction ledger
+This makes the repository suitable both as a learning project and as a solid base for extending into a richer wallet product.
 
-   Store every debit and credit in a `transaction` table with `fromUserId`, `toUserId`, `amount`, `status`, `type`, `referenceId`, and `createdAt`.
+## 📌 Current State
 
-3. Add transaction history
+What is production-style already:
 
-   Create `GET /api/account/transactions` with pagination, filters, and transaction status.
+- split frontend/backend repo organization
+- service-layer backend structure
+- Prisma schema and migrations
+- JWT auth flow
+- transactional balance transfer logic
+- polished UI direction and multi-screen frontend flow
 
-4. Store money in smallest currency units
+What is still a natural next step:
 
-   Rename or migrate `balance` to something like `balanceInPaise` so the money model is precise and professional.
+- transaction history backed by the database instead of demo activity data
+- refresh token or session expiration UX
+- stronger API status handling for validation and auth failures
+- automated tests
+- deployment configuration
 
-5. Add idempotency keys
+## 🧭 Suggested Next Improvements
 
-   Support an `Idempotency-Key` header for transfer requests so retries do not create duplicate payments.
+- Add transaction history API and wire it to the wallet activity feed
+- Introduce protected frontend routing for authenticated screens
+- Add toast notifications and optimistic UI states
+- Add integration tests for auth and transfer flows
+- Harden env handling and startup checks
+- Add Docker or compose-based local infrastructure
 
-6. Add rate limiting
+## 👤 Author
 
-   Protect signin, signup, user search, and transfer endpoints from brute force and abuse.
+Built as a focused wallet-transfer full-stack project under the `Paykar` name.
 
-7. Improve auth
+---
 
-   Add short-lived access tokens, refresh tokens, token rotation, and logout support.
+<div align="center">
 
-8. Standardize API errors
+**Paykar**  
+Build the payment flow. Keep the architecture clean.
 
-   Return consistent error payloads with `success`, `message`, and `code`.
-
-9. Add tests
-
-   Cover signup, signin, duplicate users, protected balance access, search, and transfer rollback.
-
-10. Add deployment readiness
-
-    Add `.env.example`, health check endpoint, request logging, CORS config, Dockerfile, and CI for lint, typecheck, and build.
-
-### Frontend Improvements
-
-1. Build auth pages
-
-   Add signup and signin screens connected to the backend APIs.
-
-2. Add protected dashboard
-
-   Show user balance, account details, and quick payment actions after login.
-
-3. Build user search UI
-
-   Add a search input that calls `/api/user/search` and displays possible receivers.
-
-4. Build transfer UI
-
-   Add receiver selection, amount input, confirmation step, and success/failure states.
-
-5. Add transaction history screen
-
-   Show incoming and outgoing payments once the backend ledger is added.
-
-6. Add session handling
-
-   Store tokens safely, handle expired sessions, and redirect unauthenticated users.
-
-7. Add polished loading and empty states
-
-   Use skeletons, inline errors, and helpful empty states for a more finished product.
-
-8. Add responsive design
-
-   Make the wallet experience work cleanly on mobile and desktop.
-
-## Suggested Roadmap
-
-1. Finish the backend transfer API.
-2. Add transaction ledger and history APIs.
-3. Build frontend signup and signin pages.
-4. Connect frontend auth to backend JWT flow.
-5. Build dashboard, user search, and transfer screens.
-6. Add tests for backend business logic.
-7. Add `.env.example`, health check, Docker, and CI.
-
-## Why This Project Stands Out
-
-Paykar is built by hand with a clear full-stack structure. The backend already uses real production concepts like password hashing, JWT auth, validation, Prisma transactions, and relational database modeling. With transfer, ledger, tests, and a polished frontend, it can become a strong portfolio-level wallet application.
+</div>
