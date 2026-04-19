@@ -12,3 +12,4 @@ if (!authHeader || !authHeader.startsWith("Bearer ")) {
   const decoded = verifyToken(token)
   return decoded.userId;
 }
+

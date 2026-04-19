@@ -41,13 +41,13 @@ export function TransferBox({
   error,
 }: TransferBoxProps) {
   return (
-    <section className="rounded-[34px] border border-white/80 bg-white/72 p-7 shadow-[0_18px_48px_rgba(244,114,158,0.12)] backdrop-blur-md dark:border-white/10 dark:bg-white/8 dark:shadow-[0_18px_48px_rgba(0,0,0,0.22)] lg:p-8">
+    <section className="rounded-[34px] border border-white/80 bg-white/72 p-7 shadow-[0_18px_48px_rgba(244,114,158,0.12)] backdrop-blur-md lg:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ec407a] dark:text-[#f8b4c6]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ec407a]">
             Transfer
           </p>
-          <h2 className="mt-4 text-3xl font-extrabold leading-[1.04] text-[#242124] dark:text-white md:text-4xl">
+          <h2 className="mt-4 text-3xl font-extrabold leading-[1.04] text-[#242124] md:text-4xl">
             Quick pay
           </h2>
         </div>
@@ -64,12 +64,12 @@ export function TransferBox({
           error={searchError}
         />
 
-        <div className="rounded-[28px] bg-[#242124] p-6 text-white dark:bg-[#171717] lg:p-7">
+        <div className="rounded-[28px] bg-gradient-to-br from-[#35272e] via-[#403038] to-[#4b3942] p-6 text-white lg:p-7">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#f8b4c6]">
             Details
           </p>
 
-          <div className="mt-6 rounded-[22px] border border-white/10 bg-white/8 px-5 py-5 dark:border-white/8 dark:bg-white/4">
+          <div className="mt-6 rounded-[22px] border border-white/10 bg-white/8 px-5 py-5">
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-white/52">Receiver</p>
             <p className="mt-3 text-2xl font-extrabold">
               {selectedUser ? `@${selectedUser.username}` : "@yashpay"}

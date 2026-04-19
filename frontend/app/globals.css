@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @font-face {
   font-family: "Lemon Milk";
   src: url("/fonts/LEMONMILK-Regular.otf") format("opentype");
@@ -21,11 +19,6 @@
 :root {
   --background: #fdf6f9;
   --foreground: #242124;
-}
-
-:root.dark {
-  --background: #111111;
-  --foreground: #f6f1f3;
 }
 
 @theme inline {

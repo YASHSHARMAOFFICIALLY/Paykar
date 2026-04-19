@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
+import { Jersey_10 } from "next/font/google";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
+
+
+
 export const signToken = (userId: string) => {
   return jwt.sign({ userId }, JWT_SECRET, {
     expiresIn: "7d",
@@ -14,3 +18,5 @@ export const verifyToken = (token:string)=>{
     throw new Error("Invalid token")
   }
 }
+
+

@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { Transition, Variants } from "framer-motion";
-import { ThemeToggle } from "./ThemeToggle";
 
 const features = [
   {
@@ -60,12 +59,12 @@ export function LandingPage() {
   };
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#fdf6f9] text-[#1f1f1f] transition-colors duration-300 dark:bg-[#111111] dark:text-[#f6f1f3]">
+    <main className="min-h-screen overflow-hidden bg-[#fdf6f9] text-[#1f1f1f] transition-colors duration-300">
       <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.34),_transparent_34%),linear-gradient(180deg,_#fffafb_0%,_#fdf6f9_52%,_#ffffff_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.13),_transparent_35%),linear-gradient(180deg,_#171214_0%,_#111111_55%,_#181818_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.34),_transparent_34%),linear-gradient(180deg,_#fffafb_0%,_#fdf6f9_52%,_#ffffff_100%)]" />
         <motion.div
           aria-hidden="true"
-          className="absolute inset-x-0 top-0 h-[720px] w-full bg-[url('/assets/paykar-wallet-flow.svg')] bg-cover bg-center opacity-[0.18] mix-blend-multiply dark:opacity-[0.20] dark:mix-blend-screen"
+          className="absolute inset-x-0 top-0 h-[720px] w-full bg-[url('/assets/paykar-wallet-flow.svg')] bg-cover bg-center opacity-[0.18] mix-blend-multiply"
           animate={
             shouldReduceMotion
               ? undefined
@@ -80,15 +79,15 @@ export function LandingPage() {
             ease: "easeInOut",
           }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_center,_rgba(244,114,158,0.2),_transparent_44%)] dark:bg-[radial-gradient(circle_at_top_center,_rgba(188,231,213,0.11),_transparent_44%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_center,_rgba(244,114,158,0.2),_transparent_44%)]" />
       </div>
 
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/70 bg-white/60 backdrop-blur-md dark:border-white/10 dark:bg-[#111111]/70">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/70 bg-white/60 backdrop-blur-md">
         <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8">
-          <a href="#" className="text-xl font-bold text-[#242124] dark:text-white">
+          <a href="#" className="text-xl font-bold text-[#242124]">
             Paykar
           </a>
-          <div className="hidden items-center gap-8 text-sm font-semibold text-[#555555] md:flex dark:text-[#d5c9cd]">
+          <div className="hidden items-center gap-8 text-sm font-semibold text-[#555555] md:flex">
             <a href="#features" className="transition hover:text-[#ec407a]">
               Features
             </a>
@@ -100,7 +99,6 @@ export function LandingPage() {
             </a>
           </div>
           <div className="flex items-center gap-3">
-            <ThemeToggle />
             <a className="primary-button hidden px-5 py-3 text-sm sm:inline-flex" href="/signin">
               Get Started
             </a>
@@ -116,13 +114,13 @@ export function LandingPage() {
           animate="visible"
           transition={transition}
         >
-          <p className="mx-auto mb-6 w-fit rounded-md border border-[#f8b4c6]/60 bg-white/70 px-4 py-2 text-sm font-semibold text-[#ec407a] shadow-[0_10px_30px_rgba(244,114,158,0.10)] dark:border-white/12 dark:bg-white/8 dark:text-[#f8b4c6]">
+          <p className="mx-auto mb-6 w-fit rounded-md border border-[#f8b4c6]/60 bg-white/70 px-4 py-2 text-sm font-semibold text-[#ec407a] shadow-[0_10px_30px_rgba(244,114,158,0.10)]">
             Wallet transfer project
           </p>
-          <h1 className="text-5xl font-extrabold leading-[1.06] text-[#1f1f1f] sm:text-6xl lg:text-7xl dark:text-white">
+          <h1 className="text-5xl font-extrabold leading-[1.06] text-[#1f1f1f] sm:text-6xl lg:text-7xl">
             Send Money Clearly. Move Fearlessly.
           </h1>
-          <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-[#555555] md:text-xl dark:text-[#d5c9cd]">
+          <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-[#555555] md:text-xl">
             Paykar is a focused wallet project for signup, balance checks, user
             search, and protected transfers.
           </p>
@@ -140,7 +138,7 @@ export function LandingPage() {
           </a>
           <a
             href="#how-it-works"
-            className="group inline-flex min-h-12 items-center justify-center px-3 text-base font-semibold text-[#333333] dark:text-[#f4edf0]"
+            className="group inline-flex min-h-12 items-center justify-center px-3 text-base font-semibold text-[#333333]"
           >
             See How It Works
             <span className="ml-2 h-px w-8 bg-[#ec407a] transition group-hover:w-12" />
@@ -148,7 +146,7 @@ export function LandingPage() {
         </motion.div>
 
         <motion.p
-          className="mt-8 text-sm font-medium text-[#666666] dark:text-[#c4b7bc]"
+          className="mt-8 text-sm font-medium text-[#666666]"
           variants={reveal}
           initial="hidden"
           animate="visible"
@@ -158,7 +156,7 @@ export function LandingPage() {
         </motion.p>
 
         <motion.div
-          className="mt-14 w-full max-w-4xl rounded-lg border border-white/80 bg-white/72 p-4 shadow-[0_24px_70px_rgba(17,17,17,0.10)] backdrop-blur-md dark:border-white/10 dark:bg-white/8 dark:shadow-[0_24px_70px_rgba(0,0,0,0.36)]"
+          className="mt-14 w-full max-w-4xl rounded-lg border border-white/80 bg-white/72 p-4 shadow-[0_24px_70px_rgba(17,17,17,0.10)] backdrop-blur-md"
           variants={reveal}
           initial="hidden"
           animate="visible"
@@ -166,9 +164,9 @@ export function LandingPage() {
           whileHover={shouldReduceMotion ? undefined : { y: -6 }}
         >
           <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-md bg-[#242124] p-6 text-left text-white dark:bg-[#f4edf0] dark:text-[#181314]">
+            <div className="rounded-md bg-[#35272e] p-6 text-left text-white">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-white/70 dark:text-[#4d4447]">
+                <span className="text-sm text-white/70">
                   Available balance
                 </span>
                 <span className="rounded-md bg-[#bce7d5] px-3 py-1 text-xs font-bold text-[#16392a]">
@@ -176,29 +174,29 @@ export function LandingPage() {
                 </span>
               </div>
               <p className="mt-8 text-5xl font-extrabold leading-none">Rs 7,500</p>
-              <p className="mt-4 text-sm leading-6 text-white/68 dark:text-[#4d4447]">
+              <p className="mt-4 text-sm leading-6 text-white/68">
                 Protected by bearer-token auth and linked directly to your Paykar
                 account.
               </p>
             </div>
-            <div className="rounded-md bg-white p-6 text-left dark:bg-[#171717]">
-              <p className="text-sm font-bold text-[#ec407a] dark:text-[#f8b4c6]">
+            <div className="rounded-md bg-white p-6 text-left">
+              <p className="text-sm font-bold text-[#ec407a]">
                 Quick transfer
               </p>
               <div className="mt-5 space-y-3">
-                <div className="rounded-md border border-[#f8b4c6]/50 px-4 py-3 dark:border-white/10">
-                  <p className="text-xs font-semibold text-[#777777] dark:text-[#c4b7bc]">
+                <div className="rounded-md border border-[#f8b4c6]/50 px-4 py-3">
+                  <p className="text-xs font-semibold text-[#777777]">
                     Receiver
                   </p>
-                  <p className="mt-1 font-bold text-[#242124] dark:text-white">
+                  <p className="mt-1 font-bold text-[#242124]">
                     @yashpay
                   </p>
                 </div>
-                <div className="rounded-md border border-[#f8b4c6]/50 px-4 py-3 dark:border-white/10">
-                  <p className="text-xs font-semibold text-[#777777] dark:text-[#c4b7bc]">
+                <div className="rounded-md border border-[#f8b4c6]/50 px-4 py-3">
+                  <p className="text-xs font-semibold text-[#777777]">
                     Amount
                   </p>
-                  <p className="mt-1 font-bold text-[#242124] dark:text-white">
+                  <p className="mt-1 font-bold text-[#242124]">
                     Rs 1,200
                   </p>
                 </div>
@@ -210,7 +208,7 @@ export function LandingPage() {
           </div>
         </motion.div>
 
-        <p className="mt-12 text-sm font-semibold text-[#777777] dark:text-[#c4b7bc]">
+        <p className="mt-12 text-sm font-semibold text-[#777777]">
           Built for clear, reliable payment demos
         </p>
       </section>
@@ -220,7 +218,7 @@ export function LandingPage() {
           {features.map((feature, index) => (
             <motion.article
               key={feature.title}
-              className="rounded-lg border border-white/80 bg-white/68 p-7 shadow-[0_18px_48px_rgba(244,114,158,0.12)] backdrop-blur-md dark:border-white/10 dark:bg-white/8 dark:shadow-[0_18px_48px_rgba(0,0,0,0.22)]"
+              className="rounded-lg border border-white/80 bg-white/68 p-7 shadow-[0_18px_48px_rgba(244,114,158,0.12)] backdrop-blur-md"
               variants={reveal}
               initial="hidden"
               whileInView="visible"
@@ -231,10 +229,10 @@ export function LandingPage() {
               }}
               whileHover={shouldReduceMotion ? undefined : { y: -8 }}
             >
-              <h2 className="text-2xl font-extrabold text-[#242124] dark:text-white">
+              <h2 className="text-2xl font-extrabold text-[#242124]">
                 {feature.title}
               </h2>
-              <p className="mt-4 text-base leading-7 text-[#555555] dark:text-[#d5c9cd]">
+              <p className="mt-4 text-base leading-7 text-[#555555]">
                 {feature.description}
               </p>
             </motion.article>
@@ -244,20 +242,20 @@ export function LandingPage() {
 
       <section
         id="how-it-works"
-        className="border-y border-[#f8b4c6]/25 bg-white/62 px-6 py-24 dark:border-white/10 dark:bg-white/5"
+        className="border-y border-[#f8b4c6]/25 bg-white/62 px-6 py-24"
       >
         <div className="mx-auto max-w-5xl text-center">
-          <p className="text-sm font-bold uppercase text-[#ec407a] dark:text-[#f8b4c6]">
+          <p className="text-sm font-bold uppercase text-[#ec407a]">
             How It Works
           </p>
-          <h2 className="mt-4 text-4xl font-extrabold leading-tight text-[#242124] md:text-5xl dark:text-white">
+          <h2 className="mt-4 text-4xl font-extrabold leading-tight text-[#242124] md:text-5xl">
             Four steps from account to transfer.
           </h2>
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, index) => (
               <motion.div
                 key={step}
-                className="rounded-lg border border-[#f8b4c6]/40 bg-white px-5 py-6 text-left shadow-[0_12px_36px_rgba(17,17,17,0.06)] dark:border-white/10 dark:bg-[#171717] dark:shadow-[0_12px_36px_rgba(0,0,0,0.24)]"
+                className="rounded-lg border border-[#f8b4c6]/40 bg-white px-5 py-6 text-left shadow-[0_12px_36px_rgba(17,17,17,0.06)]"
                 variants={reveal}
                 initial="hidden"
                 whileInView="visible"
@@ -270,7 +268,7 @@ export function LandingPage() {
                 <span className="text-sm font-bold text-[#f4729e]">
                   0{index + 1}
                 </span>
-                <p className="mt-4 text-lg font-extrabold text-[#242124] dark:text-white">
+                <p className="mt-4 text-lg font-extrabold text-[#242124]">
                   {step}
                 </p>
               </motion.div>
@@ -281,10 +279,10 @@ export function LandingPage() {
 
       <section id="testimonials" className="px-6 py-24">
         <div className="mx-auto max-w-5xl text-center">
-          <p className="text-sm font-bold uppercase text-[#ec407a] dark:text-[#f8b4c6]">
+          <p className="text-sm font-bold uppercase text-[#ec407a]">
             Testimonials
           </p>
-          <h2 className="mt-4 text-4xl font-extrabold leading-tight text-[#242124] md:text-5xl dark:text-white">
+          <h2 className="mt-4 text-4xl font-extrabold leading-tight text-[#242124] md:text-5xl">
             Project feedback in motion.
           </h2>
         </div>
@@ -293,14 +291,14 @@ export function LandingPage() {
             {marqueeItems.map((testimonial, index) => (
               <motion.figure
                 key={`${testimonial.name}-${index}`}
-                className="w-[280px] shrink-0 rounded-lg border border-white/80 bg-white/72 p-6 text-left shadow-[0_18px_48px_rgba(244,114,158,0.12)] backdrop-blur-md sm:w-[360px] dark:border-white/10 dark:bg-white/8 dark:shadow-[0_18px_48px_rgba(0,0,0,0.22)]"
+                className="w-[280px] shrink-0 rounded-lg border border-white/80 bg-white/72 p-6 text-left shadow-[0_18px_48px_rgba(244,114,158,0.12)] backdrop-blur-md sm:w-[360px]"
                 whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 260, damping: 22 }}
               >
-                <blockquote className="text-lg font-extrabold leading-7 text-[#242124] dark:text-white">
+                <blockquote className="text-lg font-extrabold leading-7 text-[#242124]">
                   &quot;{testimonial.quote}&quot;
                 </blockquote>
-                <figcaption className="mt-5 text-sm font-semibold text-[#666666] dark:text-[#c4b7bc]">
+                <figcaption className="mt-5 text-sm font-semibold text-[#666666]">
                   {testimonial.name}
                 </figcaption>
               </motion.figure>
@@ -310,8 +308,8 @@ export function LandingPage() {
       </section>
 
       <section id="get-started" className="px-6 pb-12">
-        <div className="mx-auto max-w-5xl rounded-lg bg-[#242124] px-6 py-16 text-center text-white shadow-[0_24px_70px_rgba(17,17,17,0.16)] dark:bg-[#f4edf0] dark:text-[#181314]">
-          <p className="text-sm font-bold uppercase text-[#f8b4c6] dark:text-[#a32756]">
+        <div className="mx-auto max-w-5xl rounded-lg bg-gradient-to-br from-[#35272e] via-[#423036] to-[#5a3d46] px-6 py-16 text-center text-white shadow-[0_24px_70px_rgba(17,17,17,0.16)]">
+          <p className="text-sm font-bold uppercase text-[#f8b4c6]">
             Open the wallet flow
           </p>
           <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl">
@@ -323,7 +321,7 @@ export function LandingPage() {
             </a>
             <a
               href="#how-it-works"
-              className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/18 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/8 dark:border-[#d8ccd0] dark:text-[#181314] dark:hover:bg-[#e8dde1]"
+              className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/18 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/8"
             >
               Review Backend Flow
             </a>

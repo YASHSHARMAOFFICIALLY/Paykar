@@ -104,24 +104,24 @@ export function AuthForm({ mode }: AuthFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[32px] border border-white/80 bg-white/74 p-6 shadow-[0_24px_70px_rgba(18,18,18,0.10)] backdrop-blur-md dark:border-white/10 dark:bg-white/8 lg:p-8"
+      className="rounded-[32px] border border-white/80 bg-white/74 p-6 shadow-[0_24px_70px_rgba(18,18,18,0.10)] backdrop-blur-md lg:p-8"
     >
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ec407a] dark:text-[#f8b4c6]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ec407a]">
             {mode === "signin" ? "Welcome Back" : "Create Account"}
           </p>
-          <h1 className="mt-3 text-3xl font-extrabold leading-[1.02] text-[#242124] dark:text-white lg:text-[2rem]">
+          <h1 className="mt-3 text-3xl font-extrabold leading-[1.02] text-[#242124] lg:text-[2rem]">
             {mode === "signin" ? "Sign in" : "Sign up"}
           </h1>
         </div>
-        <div className="inline-flex rounded-full border border-[#f2d2dc] bg-[#fff6fa] p-1 dark:border-white/10 dark:bg-[#171717]">
+        <div className="inline-flex rounded-full border border-[#f2d2dc] bg-[#fff6fa] p-1">
           <Link
             href="/signin"
             className={`rounded-full px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] transition ${
               mode === "signin"
-                ? "bg-[#242124] text-white dark:bg-[#f4edf0] dark:text-[#181314]"
-                : "text-[#74696d] dark:text-[#c4b7bc]"
+                ? "bg-[#242124] text-white"
+                : "text-[#74696d]"
             }`}
           >
             Sign in
@@ -130,8 +130,8 @@ export function AuthForm({ mode }: AuthFormProps) {
             href="/signup"
             className={`rounded-full px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] transition ${
               mode === "signup"
-                ? "bg-[#242124] text-white dark:bg-[#f4edf0] dark:text-[#181314]"
-                : "text-[#74696d] dark:text-[#c4b7bc]"
+                ? "bg-[#242124] text-white"
+                : "text-[#74696d]"
             }`}
           >
             Sign up
@@ -196,26 +196,22 @@ export function AuthForm({ mode }: AuthFormProps) {
       </button>
 
       {message ? (
-        <p className="mt-4 rounded-md border border-[#bce7d5] bg-[#edf9f3] px-4 py-3 text-sm font-semibold text-[#1a5a40] dark:border-[#315849] dark:bg-[#10261c] dark:text-[#bce7d5]">
+        <p className="mt-4 rounded-md border border-[#bce7d5] bg-[#edf9f3] px-4 py-3 text-sm font-semibold text-[#1a5a40]">
           {message}
         </p>
       ) : null}
 
       {requestError ? (
-        <p className="mt-4 rounded-md border border-[#f7c4cd] bg-[#fff0f2] px-4 py-3 text-sm font-semibold text-[#a33a51] dark:border-[#5f2632] dark:bg-[#2b1218] dark:text-[#ffbecd]">
+        <p className="mt-4 rounded-md border border-[#f7c4cd] bg-[#fff0f2] px-4 py-3 text-sm font-semibold text-[#a33a51]">
           {requestError}
         </p>
       ) : null}
 
-      <div className="mt-5 flex items-center justify-between gap-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[#8f8186] dark:text-[#a89ca0]">
-        <span>
-          {mode === "signin"
-            ? "Username + password"
-            : "Schema-ready fields"}
-        </span>
+      <div className="mt-5 flex items-center justify-between gap-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[#8f8186]">
+       
         <Link
           href={mode === "signin" ? "/signup" : "/signin"}
-          className="text-[#ec407a] dark:text-[#f8b4c6]"
+          className="text-[#ec407a]"
         >
           {mode === "signin" ? "Create account" : "Have an account"}
         </Link>
@@ -235,20 +231,20 @@ type FieldProps = {
 function Field({ label, value, onChange, error, type = "text" }: FieldProps) {
   return (
     <label className="grid gap-1.5">
-      <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#6e6266] dark:text-[#ccbfc4]">
+      <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#6e6266]">
         {label}
       </span>
       <input
         type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className={`min-h-13 rounded-[18px] border bg-white px-4 text-sm font-semibold text-[#242124] outline-none transition dark:bg-[#111111] dark:text-white ${
+        className={`min-h-13 rounded-[18px] border bg-white px-4 text-sm font-semibold text-[#242124] outline-none transition ${
           error
             ? "border-[#ec407a]"
-            : "border-[#f0d2db] focus:border-[#ec407a] dark:border-white/10"
+            : "border-[#f0d2db] focus:border-[#ec407a]"
         }`}
       />
-      <span className="min-h-4 text-[11px] font-bold text-[#b03b56] dark:text-[#ffbfd0]">
+      <span className="min-h-4 text-[11px] font-bold text-[#b03b56]">
         {error ?? ""}
       </span>
     </label>

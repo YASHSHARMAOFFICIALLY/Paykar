@@ -33,6 +33,7 @@ export const transfer = async (
     where: { id: toUserId },
   });
 
+
   if (!receiver) {
     throw new Error("Receiver not found");
   }

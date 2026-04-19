@@ -19,7 +19,7 @@ firstname: string;
   if(existingUser){
     throw new Error("User already existed")
   }
-  const hashedPassword = await bcrypt.hash(password,12)
+    const hashedPassword = await bcrypt.hash(password,12)
    const result = await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
       data: {

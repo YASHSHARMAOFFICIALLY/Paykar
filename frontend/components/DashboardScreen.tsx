@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ThemeToggle } from "./ThemeToggle";
 import { BalanceCard } from "./BalanceCard";
 import { TransactionList } from "./TransactionList";
 import { TransferBox } from "./TransferBox";
@@ -204,27 +203,38 @@ export function DashboardScreen() {
     username: user.username,
     name: `${user.firstname} ${user.lastname}`,
   }));
+  const hasSelection = Boolean(selectedUser);
+  const selectedFirstName = selectedUser?.firstname ?? "someone";
+  const heroTone = hasSelection
+    ? "from-[#fff4f8] via-[#fff8fb] to-[#eefaf5] border-[#f1d9e1]"
+    : "from-[#fff6fa] via-white to-[#fff1f6] border-[#efd6df]";
+  const heroTitle = hasSelection
+    ? `Pay ${selectedFirstName}`
+    : "Move money";
+  const heroSubtitle = hasSelection ? "with confidence." : "without noise.";
+  const successRate = transferError ? "91.8%" : transferMessage ? "99.2%" : "98.4%";
+  const volumeStat = balance !== null ? `Rs ${balance}` : "Rs --";
+  const activityCount = transferMessage ? "1 active" : `${results.length || 0} live`;
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#fdf6f9] text-[#1f1f1f] transition-colors duration-300 dark:bg-[#111111] dark:text-[#f6f1f3]">
+    <main className="min-h-screen overflow-hidden bg-[#fdf6f9] text-[#1f1f1f] transition-colors duration-300">
       <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.34),_transparent_34%),linear-gradient(180deg,_#fffafb_0%,_#fdf6f9_52%,_#ffffff_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.13),_transparent_35%),linear-gradient(180deg,_#171214_0%,_#111111_55%,_#181818_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_center,_rgba(244,114,158,0.18),_transparent_44%)] dark:bg-[radial-gradient(circle_at_top_center,_rgba(188,231,213,0.11),_transparent_44%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.34),_transparent_34%),linear-gradient(180deg,_#fffafb_0%,_#fdf6f9_52%,_#ffffff_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_center,_rgba(244,114,158,0.18),_transparent_44%)]" />
       </div>
 
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/70 bg-white/60 backdrop-blur-md dark:border-white/10 dark:bg-[#111111]/70">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/70 bg-white/60 backdrop-blur-md">
         <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8">
-          <Link href="/" className="text-xl font-bold text-[#242124] dark:text-white">
+          <Link href="/" className="text-xl font-bold text-[#242124]">
             Paykar
           </Link>
           <div className="flex items-center gap-3">
             <Link
               href="/signin"
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#efc4d0] bg-white/70 px-5 text-sm font-bold text-[#242124] shadow-[0_10px_30px_rgba(18,18,18,0.08)] transition hover:-translate-y-0.5 dark:border-white/12 dark:bg-white/8 dark:text-white"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#efc4d0] bg-white/70 px-5 text-sm font-bold text-[#242124] shadow-[0_10px_30px_rgba(18,18,18,0.08)] transition hover:-translate-y-0.5"
             >
               Sign in
             </Link>
-            <ThemeToggle />
           </div>
         </nav>
       </header>
@@ -232,21 +242,28 @@ export function DashboardScreen() {
       <section className="mx-auto max-w-7xl px-6 pb-24 pt-28 lg:px-8">
         <div className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
           <div className="grid gap-8">
-            <div className="relative overflow-hidden rounded-[40px] bg-[#242124] p-8 text-white shadow-[0_28px_90px_rgba(18,18,18,0.16)] dark:bg-[#171315] lg:p-10">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(248,180,198,0.24),_transparent_36%),linear-gradient(135deg,_rgba(255,255,255,0.06),_transparent_45%)]" />
+            <div
+              className={`relative overflow-hidden rounded-[40px] border bg-gradient-to-br p-8 text-[#242124] shadow-[0_28px_90px_rgba(18,18,18,0.10)] lg:p-10 ${heroTone}`}
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(248,180,198,0.24),_transparent_36%),radial-gradient(circle_at_bottom_right,_rgba(188,231,213,0.24),_transparent_34%)]" />
               <div className="relative z-10">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#f8b4c6]">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#c34372]">
                   Dashboard
                 </p>
-                <h1 className="mt-5 text-5xl font-extrabold leading-[0.94] text-white lg:text-7xl">
-                  Move money
+                <h1 className="mt-5 text-4xl font-extrabold leading-[0.94] text-[#242124] lg:text-6xl">
+                  {heroTitle}
                   <br />
-                  without noise.
+                  {heroSubtitle}
                 </h1>
-                <div className="mt-10 grid gap-3 sm:grid-cols-3">
-                  <HeroStat label="Volume" value="Rs 32k" />
-                  <HeroStat label="Success" value="98.4%" />
-                  <HeroStat label="Contacts" value="124" />
+                <p className="mt-4 max-w-xl text-sm font-semibold leading-6 text-[#6d5f64]">
+                  {hasSelection
+                    ? `Receiver selected: @${selectedUser?.username}. Review the amount and send when ready.`
+                    : "Search a receiver, review your balance, and complete transfers from one focused screen."}
+                </p>
+                <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                  <HeroStat label="Balance" value={volumeStat} accent="rose" />
+                  <HeroStat label="Success" value={successRate} accent="mint" />
+                  <HeroStat label="Search" value={activityCount} accent="amber" />
                 </div>
               </div>
             </div>
@@ -287,13 +304,13 @@ export function DashboardScreen() {
           </div>
 
           <div className="grid gap-8">
-            <div className="rounded-[34px] border border-white/80 bg-white/72 p-7 shadow-[0_20px_60px_rgba(18,18,18,0.08)] backdrop-blur-md dark:border-white/10 dark:bg-white/8 lg:p-8">
+            <div className="rounded-[34px] border border-white/80 bg-gradient-to-br from-white/80 via-[#fffafb] to-[#fff3f7] p-7 shadow-[0_20px_60px_rgba(18,18,18,0.08)] backdrop-blur-md lg:p-8">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ec407a] dark:text-[#f8b4c6]">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ec407a]">
                     Contacts
                   </p>
-                  <h2 className="mt-4 text-3xl font-extrabold text-[#242124] dark:text-white">
+                  <h2 className="mt-4 text-3xl font-extrabold text-[#242124]">
                     Frequent
                   </h2>
                 </div>
@@ -304,28 +321,28 @@ export function DashboardScreen() {
                     key={contact.username}
                     className={`flex items-center justify-between rounded-[22px] border px-5 py-4 ${
                       index === 0
-                        ? "border-[#ec407a]/25 bg-[#fff1f6] dark:border-[#f8b4c6]/20 dark:bg-[#22171b]"
-                        : "border-[#f2d2dc] bg-[#fffafb] dark:border-white/10 dark:bg-[#171717]"
+                        ? "border-[#ec407a]/25 bg-[#fff1f6]"
+                        : "border-[#f2d2dc] bg-[#fffafb]"
                     }`}
                   >
                     <div>
-                      <p className="text-base font-extrabold text-[#242124] dark:text-white">
+                      <p className="text-base font-extrabold text-[#242124]">
                         @{contact.username}
                       </p>
-                      <p className="mt-1 text-sm font-semibold text-[#7b6f73] dark:text-[#bfb2b7]">
+                      <p className="mt-1 text-sm font-semibold text-[#7b6f73]">
                         {contact.name}
                       </p>
                     </div>
                     <button
                       type="button"
-                      className="rounded-full border border-[#efc4d0] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#242124] transition hover:bg-[#fff2f6] dark:border-white/10 dark:text-white dark:hover:bg-white/8"
+                      className="rounded-full border border-[#efc4d0] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#242124] transition hover:bg-[#fff2f6]"
                     >
                       Pay
                     </button>
                   </div>
                 ))}
                 {!contacts.length ? (
-                  <p className="rounded-[22px] border border-[#f2d2dc] bg-[#fffafb] px-5 py-4 text-sm font-semibold text-[#7b6f73] dark:border-white/10 dark:bg-[#171717] dark:text-[#bfb2b7]">
+                  <p className="rounded-[22px] border border-[#f2d2dc] bg-[#fffafb] px-5 py-4 text-sm font-semibold text-[#7b6f73]">
                     Search for users to load live contacts from the backend.
                   </p>
                 ) : null}
@@ -340,13 +357,29 @@ export function DashboardScreen() {
   );
 }
 
-function HeroStat({ label, value }: { label: string; value: string }) {
+function HeroStat({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string;
+  accent: "rose" | "mint" | "amber";
+}) {
+  const accentClasses = {
+    rose: "from-[#fff4f8] to-white",
+    mint: "from-[#f2fbf6] to-white",
+    amber: "from-[#fff8ef] to-white",
+  };
+
   return (
-    <div className="rounded-[26px] border border-white/10 bg-white/8 px-4 py-4 backdrop-blur-sm">
-      <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
+    <div
+      className={`rounded-[26px] border border-white/70 bg-gradient-to-br px-4 py-4 shadow-[0_12px_30px_rgba(17,17,17,0.05)] backdrop-blur-sm ${accentClasses[accent]}`}
+    >
+      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#8d7d83]">
         {label}
       </p>
-      <p className="mt-3 text-2xl font-extrabold text-white">{value}</p>
+      <p className="mt-2 text-lg font-extrabold text-[#242124]">{value}</p>
     </div>
   );
 }

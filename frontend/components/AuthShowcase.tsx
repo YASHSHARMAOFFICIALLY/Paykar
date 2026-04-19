@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ThemeToggle } from "./ThemeToggle";
 
 type AuthShowcaseProps = {
   mode: "signin" | "signup";
@@ -7,25 +6,27 @@ type AuthShowcaseProps = {
 
 export function AuthShowcase({ mode }: AuthShowcaseProps) {
   return (
-    <div className="relative overflow-hidden rounded-[36px] bg-[#242124] p-6 text-white shadow-[0_30px_90px_rgba(18,18,18,0.18)] dark:bg-[#161214] lg:min-h-[680px] lg:p-8">
+    <div className="relative overflow-hidden rounded-[36px] bg-gradient-to-br from-[#2f2329] via-[#3d2c34] to-[#523842] p-6 text-white shadow-[0_30px_90px_rgba(18,18,18,0.18)] lg:min-h-[380px] lg:p-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(248,180,198,0.26),_transparent_34%),linear-gradient(180deg,_rgba(255,255,255,0.06),_transparent)]" />
       <div className="relative z-10 flex h-full flex-col">
         <div className="flex items-center justify-between gap-4">
           <Link href="/" className="text-xl font-bold text-white">
             Paykar
           </Link>
-          <ThemeToggle />
+          <span className="rounded-full border border-white/16 bg-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/70">
+            Wallet Flow
+          </span>
         </div>
 
         <div className="mt-14 max-w-md lg:mt-16">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#f8b4c6]">
-            Resume Wallet Project
+Paykar
           </p>
           <h2 className="mt-4 text-3xl font-extrabold leading-[1.02] text-white lg:text-4xl">
-            {mode === "signin" ? "Money UI with a sharp first impression." : "A signup flow that looks hired, not generated."}
+            {mode === "signin" ? "Welcome Back Log in to continue" : "Create Account on Paykar to send money"}
           </h2>
           <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-white/55">
-            Same type, same palette, cleaner structure.
+           
           </p>
         </div>
 
