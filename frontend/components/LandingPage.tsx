@@ -101,11 +101,8 @@ export function LandingPage() {
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <a
-              className="primary-button hidden px-5 py-3 text-sm sm:inline-flex"
-              href="#get-started"
-            >
-              Explore Project
+            <a className="primary-button hidden px-5 py-3 text-sm sm:inline-flex" href="/signin">
+              Get Started
             </a>
           </div>
         </nav>
@@ -138,8 +135,8 @@ export function LandingPage() {
           animate="visible"
           transition={{ ...transition, delay: shouldReduceMotion ? 0 : 0.12 }}
         >
-          <a className="primary-button w-full px-10 py-4 sm:w-auto" href="#get-started">
-            Explore Project
+          <a className="primary-button w-full px-10 py-4 sm:w-auto" href="/signin">
+            Get Started
           </a>
           <a
             href="#how-it-works"
@@ -320,20 +317,17 @@ export function LandingPage() {
           <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl">
             Explore signup, balance, search, and transfer in one project.
           </h2>
-          <form className="mx-auto mt-9 flex max-w-xl flex-col gap-3 sm:flex-row">
-            <label className="sr-only" htmlFor="email">
-              Email address
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              className="min-h-14 flex-1 rounded-md border border-white/20 bg-white px-4 text-base text-[#242124] outline-none transition placeholder:text-[#777777] focus:border-[#f8b4c6] dark:border-[#ded2d6]"
-            />
-            <button className="primary-button px-8 py-4" type="submit">
-              Get Project Updates
-            </button>
-          </form>
+          <div className="mx-auto mt-9 flex max-w-xl flex-col gap-3 sm:flex-row sm:justify-center">
+            <a className="primary-button px-8 py-4" href="/signin">
+              Sign In
+            </a>
+            <a
+              href="#how-it-works"
+              className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/18 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/8 dark:border-[#d8ccd0] dark:text-[#181314] dark:hover:bg-[#e8dde1]"
+            >
+              Review Backend Flow
+            </a>
+          </div>
         </div>
       </section>
     </main>

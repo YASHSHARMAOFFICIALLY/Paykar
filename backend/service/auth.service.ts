@@ -10,7 +10,6 @@ firstname: string;
   password: string;
 })=>{
     const {firstname,lastname,email,username,password} = data;
-
     const existingUser = await prisma.user.findFirst({
         where: {
       OR: [{ email }, { username }],
@@ -21,8 +20,6 @@ firstname: string;
     throw new Error("User already existed")
   }
   const hashedPassword = await bcrypt.hash(password,12)
-
-
    const result = await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
       data: {
@@ -81,7 +78,6 @@ export const signin = async (data: {
 
   const token = signToken(existingUser.id)
 
-  // 3. Return success (JWT next step)
   return {
     message: "Signin successful",
      token,

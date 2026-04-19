@@ -2,8 +2,6 @@ import prisma from "@/lib/prisma"
 
 
 export const getbalance = async(userId:string)=>{
-
-
     const account = await  prisma.account.findUnique({
         where:{userId}
     })
@@ -57,7 +55,6 @@ export const transfer = async (
     });
 
     if (senderUpdate.count === 0) {
-     
       await tx.transactions.create({
         data: {
           fromUserId,
@@ -90,7 +87,6 @@ export const transfer = async (
       },
     });
   });
-
   return {
     message: "Transfer successful",
   };
