@@ -1,3 +1,4 @@
+import { getErrorMessage } from "@/lib/error";
 import { searchUsers } from "@/service/user.service";
 
 export async function GET(req:Request){
@@ -11,10 +12,10 @@ export async function GET(req:Request){
 
         const user = await searchUsers(query);
         return Response.json(user,{status:200})
-         }catch(error:any){
+         }catch(error: unknown){
          return Response.json(
             {
-                error:error.message || "something went wrong"
+                error:getErrorMessage(error, "something went wrong")
             },{
                 status:500
             }
