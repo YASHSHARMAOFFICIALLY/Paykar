@@ -31,3 +31,29 @@ export async function proxyToBackend(
     },
   });
 }
+
+type ProxyRequestOptions = {
+  includeAuthorization?: boolean;
+};
+
+export async function proxyRequestToBackend(
+  req: Request,
+  path: string,
+  options: ProxyRequestOptions = {},
+) {
+  const init: RequestInit = {
+    method: req.method,
+  };
+
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    init.body = await req.text();
+  }
+
+  if (options.includeAuthorization) {
+    init.headers = {
+      authorization: req.headers.get("authorization") ?? "",
+    };
+  }
+
+  return proxyToBackend(path, init);
+}

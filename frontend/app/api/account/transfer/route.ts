@@ -1,13 +1,7 @@
-import { proxyToBackend } from "@/lib/backend";
+import { proxyRequestToBackend } from "@/lib/backend";
 
 export async function POST(req: Request) {
-  const body = await req.text();
-
-  return proxyToBackend("/api/account/transfer", {
-    method: "POST",
-    body,
-    headers: {
-      authorization: req.headers.get("authorization") ?? "",
-    },
+  return proxyRequestToBackend(req, "/api/account/transfer", {
+    includeAuthorization: true,
   });
 }

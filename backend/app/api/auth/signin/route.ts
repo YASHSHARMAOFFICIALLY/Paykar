@@ -1,5 +1,6 @@
 import { SigninSchema } from "@/utils/zodSchema";
 import { signin } from "@/service/auth.service";
+import { getErrorMessage } from "@/lib/error";
 
 
 
@@ -20,10 +21,10 @@ export async function POST(req:Request){
      const data = result.data;
      const response = await signin(data);
          return Response.json(response, { status: 201 });
-     }catch(error:any){
+     }catch(error: unknown){
          return Response.json(
            {
-             error: error.message || "Something went wrong",
+             error: getErrorMessage(error),
            },
            { status: 500 }
          );

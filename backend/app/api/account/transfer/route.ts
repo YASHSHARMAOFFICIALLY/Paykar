@@ -1,4 +1,5 @@
 import { getUserFromToken } from "@/lib/auth";
+import { getErrorMessage } from "@/lib/error";
 import { TransferSchema } from "@/utils/zodSchema";
 import { transfer } from  "@/service/account.service"
 
@@ -30,10 +31,10 @@ export async function POST(req: Request) {
     // 6. Return success
     return Response.json(response, { status: 200 });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     return Response.json(
       {
-        error: error.message || "Something went wrong",
+        error: getErrorMessage(error),
       },
       { status: 500 }
     );

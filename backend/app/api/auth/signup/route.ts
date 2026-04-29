@@ -1,5 +1,6 @@
 import { SignupSchema } from "@/utils/zodSchema";
 import { signup } from "@/service/auth.service";
+import { getErrorMessage } from "@/lib/error";
 
 export async function POST(req:Request){
     try {
@@ -18,10 +19,10 @@ export async function POST(req:Request){
      const data = result.data;
     const response = await signup(data);
     return Response.json(response, { status: 201 });
-}catch(error:any){
+}catch(error: unknown){
     return Response.json(
       {
-        error: error.message || "Something went wrong",
+        error: getErrorMessage(error),
       },
       { status: 500 }
     );

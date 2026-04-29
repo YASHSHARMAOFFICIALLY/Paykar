@@ -1,10 +1,5 @@
-import { proxyToBackend } from "@/lib/backend";
+import { proxyRequestToBackend } from "@/lib/backend";
 
 export async function POST(req: Request) {
-  const body = await req.text();
-
-  return proxyToBackend("/api/auth/signup", {
-    method: "POST",
-    body,
-  });
+  return proxyRequestToBackend(req, "/api/auth/signup");
 }
