@@ -1,330 +1,55 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-import type { Transition, Variants } from "framer-motion";
-
-const features = [
-  {
-    title: "Instant Wallet Setup",
-    description:
-      "Create an account, receive a starting balance, and move into your wallet without extra setup.",
-  },
-  {
-    title: "Focused Money Search",
-    description:
-      "Find people by username or first name before sending money, with clean receiver details.",
-  },
-  {
-    title: "Protected Transfers",
-    description:
-      "JWT-secured balance checks and atomic account updates keep every payment flow deliberate.",
-  },
-];
-
-const steps = ["Sign up", "Check balance", "Search receiver", "Send money"];
-
-const testimonials = [
-  {
-    quote:
-      "Paykar feels like the wallet flow every side project should have from day one.",
-    name: "Fintech prototype builder",
-  },
-  {
-    quote:
-      "The search, balance, and transfer screens make the project easy to understand fast.",
-    name: "Full-stack reviewer",
-  },
-  {
-    quote:
-      "A clean wallet demo with the right backend checks behind the simple interface.",
-    name: "Payments engineering learner",
-  },
-  {
-    quote:
-      "It explains the product through the actual flow instead of a generic SaaS pitch.",
-    name: "Project collaborator",
-  },
-];
+import Link from "next/link";
 
 export function LandingPage() {
-  const marqueeItems = [...testimonials, ...testimonials];
-  const shouldReduceMotion = useReducedMotion();
-  const reveal: Variants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 28, filter: "blur(10px)" },
-    visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-  };
-  const transition: Transition = {
-    duration: shouldReduceMotion ? 0 : 0.72,
-    ease: [0.22, 1, 0.36, 1],
-  };
-
   return (
-    <main className="min-h-screen overflow-hidden bg-[#fdf6f9] text-[#1f1f1f] transition-colors duration-300">
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.34),_transparent_34%),linear-gradient(180deg,_#fffafb_0%,_#fdf6f9_52%,_#ffffff_100%)]" />
-        <motion.div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-0 h-[720px] w-full bg-[url('/assets/paykar-wallet-flow.svg')] bg-cover bg-center opacity-[0.18] mix-blend-multiply"
-          animate={
-            shouldReduceMotion
-              ? undefined
-              : {
-                  scale: [1, 1.025, 1],
-                  x: [0, -12, 0],
-                }
-          }
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_center,_rgba(244,114,158,0.2),_transparent_44%)]" />
-      </div>
-
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/70 bg-white/60 backdrop-blur-md">
-        <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8">
-          <a href="#" className="text-xl font-bold text-[#242124]">
-            Paykar
-          </a>
-          <div className="hidden items-center gap-8 text-sm font-semibold text-[#555555] md:flex">
-            <a href="#features" className="transition hover:text-[#ec407a]">
-              Features
-            </a>
-            <a href="#how-it-works" className="transition hover:text-[#ec407a]">
-              How It Works
-            </a>
-            <a href="#testimonials" className="transition hover:text-[#ec407a]">
-              Testimonials
-            </a>
-          </div>
-          <div className="flex items-center gap-3">
-            <a className="primary-button hidden px-5 py-3 text-sm sm:inline-flex" href="/signin">
-              Get Started
-            </a>
-          </div>
-        </nav>
-      </header>
-
-      <section className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col items-center justify-center px-6 pb-14 pt-32 text-center lg:px-8">
-        <motion.div
-          className="max-w-5xl"
-          variants={reveal}
-          initial="hidden"
-          animate="visible"
-          transition={transition}
-        >
-          <p className="mx-auto mb-6 w-fit rounded-md border border-[#f8b4c6]/60 bg-white/70 px-4 py-2 text-sm font-semibold text-[#ec407a] shadow-[0_10px_30px_rgba(244,114,158,0.10)]">
-            Wallet transfer project
-          </p>
-          <h1 className="text-5xl font-extrabold leading-[1.06] text-[#1f1f1f] sm:text-6xl lg:text-7xl">
-            Send Money Clearly. Move Fearlessly.
+    <main className="min-h-screen bg-background text-foreground">
+      <section className="mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p className="eyebrow">Paykar wallet</p>
+          <h1 className="mt-4 text-5xl font-bold tracking-tight sm:text-6xl">
+            Send money with Paykar.
           </h1>
-          <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-[#555555] md:text-xl">
-            Paykar is a focused wallet project for signup, balance checks, user
-            search, and protected transfers.
+          <p className="muted mt-5 max-w-2xl text-lg leading-8">
+            Create an account, check your balance, find a receiver, and complete
+            transfers from one simple wallet.
           </p>
-        </motion.div>
 
-        <motion.div
-          className="mt-10 flex w-full flex-col items-center justify-center gap-4 sm:flex-row"
-          variants={reveal}
-          initial="hidden"
-          animate="visible"
-          transition={{ ...transition, delay: shouldReduceMotion ? 0 : 0.12 }}
-        >
-          <a className="primary-button w-full px-10 py-4 sm:w-auto" href="/signin">
-            Get Started
-          </a>
-          <a
-            href="#how-it-works"
-            className="group inline-flex min-h-12 items-center justify-center px-3 text-base font-semibold text-[#333333]"
-          >
-            See How It Works
-            <span className="ml-2 h-px w-8 bg-[#ec407a] transition group-hover:w-12" />
-          </a>
-        </motion.div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link className="button-primary" href="/signup">
+              Create account
+            </Link>
+            <Link className="button-secondary" href="/signin">
+              Sign in
+            </Link>
+          </div>
+        </div>
 
-        <motion.p
-          className="mt-8 text-sm font-medium text-[#666666]"
-          variants={reveal}
-          initial="hidden"
-          animate="visible"
-          transition={{ ...transition, delay: shouldReduceMotion ? 0 : 0.24 }}
-        >
-          Built as a practical full-stack payment flow, not a SaaS pricing page.
-        </motion.p>
-
-        <motion.div
-          className="mt-14 w-full max-w-4xl rounded-lg border border-white/80 bg-white/72 p-4 shadow-[0_24px_70px_rgba(17,17,17,0.10)] backdrop-blur-md"
-          variants={reveal}
-          initial="hidden"
-          animate="visible"
-          transition={{ ...transition, delay: shouldReduceMotion ? 0 : 0.36 }}
-          whileHover={shouldReduceMotion ? undefined : { y: -6 }}
-        >
-          <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-md bg-[#35272e] p-6 text-left text-white">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-white/70">
-                  Available balance
-                </span>
-                <span className="rounded-md bg-[#bce7d5] px-3 py-1 text-xs font-bold text-[#16392a]">
-                  Live
-                </span>
-              </div>
-              <p className="mt-8 text-5xl font-extrabold leading-none">Rs 7,500</p>
-              <p className="mt-4 text-sm leading-6 text-white/68">
-                Protected by bearer-token auth and linked directly to your Paykar
-                account.
+        <div className="panel bg-white/90">
+          <div className="flex items-center justify-between border-b border-[#ead8d0] pb-5">
+            <div>
+              <p className="text-sm text-[#7a6d68]">Wallet</p>
+              <p className="mt-1 text-3xl font-semibold text-[#221b19]">
+                Paykar
               </p>
             </div>
-            <div className="rounded-md bg-white p-6 text-left">
-              <p className="text-sm font-bold text-[#ec407a]">
-                Quick transfer
+            <span className="rounded-md border border-[#f1c9bb] bg-[#fff1ec] px-3 py-1 text-sm font-medium text-[#be3b24]">
+              Ready
+            </span>
+          </div>
+
+          <div className="mt-8 grid gap-4">
+            <div className="rounded-lg border border-[#ead8d0] bg-[#fff7f4] p-5">
+              <p className="text-sm text-[#7a6d68]">Pay</p>
+              <p className="mt-2 text-xl font-semibold text-[#221b19]">
+                Sign in, search receiver, send money
               </p>
-              <div className="mt-5 space-y-3">
-                <div className="rounded-md border border-[#f8b4c6]/50 px-4 py-3">
-                  <p className="text-xs font-semibold text-[#777777]">
-                    Receiver
-                  </p>
-                  <p className="mt-1 font-bold text-[#242124]">
-                    @yashpay
-                  </p>
-                </div>
-                <div className="rounded-md border border-[#f8b4c6]/50 px-4 py-3">
-                  <p className="text-xs font-semibold text-[#777777]">
-                    Amount
-                  </p>
-                  <p className="mt-1 font-bold text-[#242124]">
-                    Rs 1,200
-                  </p>
-                </div>
-              </div>
-              <button className="primary-button mt-5 w-full px-6 py-3" type="button">
-                Send Money
-              </button>
             </div>
-          </div>
-        </motion.div>
-
-        <p className="mt-12 text-sm font-semibold text-[#777777]">
-          Built for clear, reliable payment demos
-        </p>
-      </section>
-
-      <section id="features" className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-        <div className="grid gap-5 md:grid-cols-3">
-          {features.map((feature, index) => (
-            <motion.article
-              key={feature.title}
-              className="rounded-lg border border-white/80 bg-white/68 p-7 shadow-[0_18px_48px_rgba(244,114,158,0.12)] backdrop-blur-md"
-              variants={reveal}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{
-                ...transition,
-                delay: shouldReduceMotion ? 0 : index * 0.08,
-              }}
-              whileHover={shouldReduceMotion ? undefined : { y: -8 }}
-            >
-              <h2 className="text-2xl font-extrabold text-[#242124]">
-                {feature.title}
-              </h2>
-              <p className="mt-4 text-base leading-7 text-[#555555]">
-                {feature.description}
+            <div className="rounded-lg border border-[#d6eadf] bg-[#f2fbf6] p-5">
+              <p className="text-sm text-[#66766e]">Wallet</p>
+              <p className="mt-2 text-xl font-semibold text-[#1f3d31]">
+                Balance and transfers in one place
               </p>
-            </motion.article>
-          ))}
-        </div>
-      </section>
-
-      <section
-        id="how-it-works"
-        className="border-y border-[#f8b4c6]/25 bg-white/62 px-6 py-24"
-      >
-        <div className="mx-auto max-w-5xl text-center">
-          <p className="text-sm font-bold uppercase text-[#ec407a]">
-            How It Works
-          </p>
-          <h2 className="mt-4 text-4xl font-extrabold leading-tight text-[#242124] md:text-5xl">
-            Four steps from account to transfer.
-          </h2>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, index) => (
-              <motion.div
-                key={step}
-                className="rounded-lg border border-[#f8b4c6]/40 bg-white px-5 py-6 text-left shadow-[0_12px_36px_rgba(17,17,17,0.06)]"
-                variants={reveal}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{
-                  ...transition,
-                  delay: shouldReduceMotion ? 0 : index * 0.08,
-                }}
-              >
-                <span className="text-sm font-bold text-[#f4729e]">
-                  0{index + 1}
-                </span>
-                <p className="mt-4 text-lg font-extrabold text-[#242124]">
-                  {step}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="testimonials" className="px-6 py-24">
-        <div className="mx-auto max-w-5xl text-center">
-          <p className="text-sm font-bold uppercase text-[#ec407a]">
-            Testimonials
-          </p>
-          <h2 className="mt-4 text-4xl font-extrabold leading-tight text-[#242124] md:text-5xl">
-            Project feedback in motion.
-          </h2>
-        </div>
-        <div className="testimonial-marquee mt-12 overflow-hidden">
-          <div className="testimonial-track flex w-max gap-5">
-            {marqueeItems.map((testimonial, index) => (
-              <motion.figure
-                key={`${testimonial.name}-${index}`}
-                className="w-[280px] shrink-0 rounded-lg border border-white/80 bg-white/72 p-6 text-left shadow-[0_18px_48px_rgba(244,114,158,0.12)] backdrop-blur-md sm:w-[360px]"
-                whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 260, damping: 22 }}
-              >
-                <blockquote className="text-lg font-extrabold leading-7 text-[#242124]">
-                  &quot;{testimonial.quote}&quot;
-                </blockquote>
-                <figcaption className="mt-5 text-sm font-semibold text-[#666666]">
-                  {testimonial.name}
-                </figcaption>
-              </motion.figure>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="get-started" className="px-6 pb-12">
-        <div className="mx-auto max-w-5xl rounded-lg bg-gradient-to-br from-[#35272e] via-[#423036] to-[#5a3d46] px-6 py-16 text-center text-white shadow-[0_24px_70px_rgba(17,17,17,0.16)]">
-          <p className="text-sm font-bold uppercase text-[#f8b4c6]">
-            Open the wallet flow
-          </p>
-          <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-extrabold leading-tight md:text-5xl">
-            Explore signup, balance, search, and transfer in one project.
-          </h2>
-          <div className="mx-auto mt-9 flex max-w-xl flex-col gap-3 sm:flex-row sm:justify-center">
-            <a className="primary-button px-8 py-4" href="/signin">
-              Sign In
-            </a>
-            <a
-              href="#how-it-works"
-              className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/18 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/8"
-            >
-              Review Backend Flow
-            </a>
+            </div>
           </div>
         </div>
       </section>

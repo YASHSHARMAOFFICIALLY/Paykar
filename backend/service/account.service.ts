@@ -8,7 +8,6 @@ export const getbalance = async(userId:string)=>{
     if(!account){
         throw new Error("Account not found")
     }
-
     return {
         "balance":account.balance
     }

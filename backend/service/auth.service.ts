@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { signToken } from "@/lib/jwt";
 
 export const signup = async(data:{
-firstname: string;
+  firstname: string;
   lastname: string;
   email: string;
   username: string;

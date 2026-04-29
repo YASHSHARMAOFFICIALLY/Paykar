@@ -23,10 +23,10 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [values, setValues] = useState(initialValues);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
   const [requestError, setRequestError] = useState<string | null>(null);
 
   const errors = validateAuthValues(mode, values);
+  const isSignin = mode === "signin";
 
   function updateValue(field: keyof AuthValues, value: string) {
     setValues((current) => ({
@@ -38,7 +38,6 @@ export function AuthForm({ mode }: AuthFormProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitted(true);
-    setMessage(null);
     setRequestError(null);
 
     if (Object.keys(errors).length > 0) {
@@ -48,30 +47,26 @@ export function AuthForm({ mode }: AuthFormProps) {
     setLoading(true);
 
     try {
-      const payload =
-        mode === "signin"
-          ? {
-              username: values.username.trim(),
-              password: values.password,
-            }
-          : {
-              firstname: values.firstname.trim(),
-              lastname: values.lastname.trim(),
-              email: values.email.trim(),
-              username: values.username.trim(),
-              password: values.password,
-            };
+      const payload = isSignin
+        ? {
+            username: values.username.trim(),
+            password: values.password,
+          }
+        : {
+            firstname: values.firstname.trim(),
+            lastname: values.lastname.trim(),
+            email: values.email.trim(),
+            username: values.username.trim(),
+            password: values.password,
+          };
 
-      const response = await fetch(
-        `/api/auth/${mode === "signin" ? "signin" : "signup"}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
+      const response = await fetch(`/api/auth/${isSignin ? "signin" : "signup"}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(payload),
+      });
 
       const data = await response.json().catch(() => null);
 
@@ -79,8 +74,8 @@ export function AuthForm({ mode }: AuthFormProps) {
         throw new Error(data?.error?.formErrors?.[0] ?? data?.error ?? "Request failed");
       }
 
-      if (mode === "signin") {
-        if (typeof window !== "undefined" && data?.token) {
+      if (isSignin) {
+        if (data?.token) {
           window.localStorage.setItem("paykar_token", data.token);
         }
 
@@ -88,9 +83,6 @@ export function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      setMessage(data?.message ?? "Account created successfully");
-      setValues(initialValues);
-      setSubmitted(false);
       router.push("/signin");
     } catch (error) {
       setRequestError(
@@ -102,120 +94,71 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-[32px] border border-white/80 bg-white/74 p-6 shadow-[0_24px_70px_rgba(18,18,18,0.10)] backdrop-blur-md lg:p-8"
-    >
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ec407a]">
-            {mode === "signin" ? "Welcome Back" : "Create Account"}
-          </p>
-          <h1 className="mt-3 text-3xl font-extrabold leading-[1.02] text-[#242124] lg:text-[2rem]">
-            {mode === "signin" ? "Sign in" : "Sign up"}
-          </h1>
-        </div>
-        <div className="inline-flex rounded-full border border-[#f2d2dc] bg-[#fff6fa] p-1">
-          <Link
-            href="/signin"
-            className={`rounded-full px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] transition ${
-              mode === "signin"
-                ? "bg-[#242124] text-white"
-                : "text-[#74696d]"
-            }`}
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/signup"
-            className={`rounded-full px-4 py-2.5 text-xs font-bold uppercase tracking-[0.14em] transition ${
-              mode === "signup"
-                ? "bg-[#242124] text-white"
-                : "text-[#74696d]"
-            }`}
-          >
-            Sign up
-          </Link>
-        </div>
+    <form onSubmit={handleSubmit} className="panel grid gap-5">
+      <div>
+        <p className="eyebrow">{isSignin ? "Sign in" : "Sign up"}</p>
+        <h1 className="mt-2 text-3xl font-semibold">
+          {isSignin ? "Sign in" : "Create account"}
+        </h1>
+        <p className="muted mt-2 text-sm">
+          {isSignin ? "Enter your Paykar account." : "Create your Paykar wallet."}
+        </p>
       </div>
 
-      <div className="mt-8 grid gap-4">
-        {mode === "signup" ? (
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field
-              label="First name"
-              value={values.firstname}
-              onChange={(value) => updateValue("firstname", value)}
-              error={submitted ? errors.firstname : undefined}
-            />
-            <Field
-              label="Last name"
-              value={values.lastname}
-              onChange={(value) => updateValue("lastname", value)}
-              error={submitted ? errors.lastname : undefined}
-            />
-          </div>
-        ) : null}
-
-        {mode === "signup" ? (
+      {!isSignin ? (
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field
-            label="Email"
-            type="email"
-            value={values.email}
-            onChange={(value) => updateValue("email", value)}
-            error={submitted ? errors.email : undefined}
+            label="First name"
+            value={values.firstname}
+            onChange={(value) => updateValue("firstname", value)}
+            error={submitted ? errors.firstname : undefined}
           />
-        ) : null}
+          <Field
+            label="Last name"
+            value={values.lastname}
+            onChange={(value) => updateValue("lastname", value)}
+            error={submitted ? errors.lastname : undefined}
+          />
+        </div>
+      ) : null}
 
+      {!isSignin ? (
         <Field
-          label="Username"
-          value={values.username}
-          onChange={(value) => updateValue("username", value)}
-          error={submitted ? errors.username : undefined}
+          label="Email"
+          type="email"
+          value={values.email}
+          onChange={(value) => updateValue("email", value)}
+          error={submitted ? errors.email : undefined}
         />
+      ) : null}
 
-        <Field
-          label="Password"
-          type="password"
-          value={values.password}
-          onChange={(value) => updateValue("password", value)}
-          error={submitted ? errors.password : undefined}
-        />
-      </div>
+      <Field
+        label="Username"
+        value={values.username}
+        onChange={(value) => updateValue("username", value)}
+        error={submitted ? errors.username : undefined}
+      />
 
-      <button
-        className="primary-button mt-7 w-full px-8 py-3.5 text-sm"
-        type="submit"
-        disabled={loading}
-      >
-        {loading
-          ? "Working..."
-          : mode === "signin"
-            ? "Enter Wallet"
-            : "Create Wallet"}
+      <Field
+        label="Password"
+        type="password"
+        value={values.password}
+        onChange={(value) => updateValue("password", value)}
+        error={submitted ? errors.password : undefined}
+      />
+
+      <button className="button-primary w-full" type="submit" disabled={loading}>
+        {loading ? "Please wait" : isSignin ? "Sign in" : "Create account"}
       </button>
 
-      {message ? (
-        <p className="mt-4 rounded-md border border-[#bce7d5] bg-[#edf9f3] px-4 py-3 text-sm font-semibold text-[#1a5a40]">
-          {message}
-        </p>
-      ) : null}
+      {requestError ? <p className="error-text">{requestError}</p> : null}
 
-      {requestError ? (
-        <p className="mt-4 rounded-md border border-[#f7c4cd] bg-[#fff0f2] px-4 py-3 text-sm font-semibold text-[#a33a51]">
-          {requestError}
-        </p>
-      ) : null}
-
-      <div className="mt-5 flex items-center justify-between gap-4 text-[11px] font-bold uppercase tracking-[0.16em] text-[#8f8186]">
-       
-        <Link
-          href={mode === "signin" ? "/signup" : "/signin"}
-          className="text-[#ec407a]"
-        >
-          {mode === "signin" ? "Create account" : "Have an account"}
+      <p className="muted text-sm">
+        {isSignin ? "No account?" : "Already have an account?"}{" "}
+        <Link className="font-semibold text-[#be3b24]" href={isSignin ? "/signup" : "/signin"}>
+          {isSignin ? "Sign up" : "Sign in"}
         </Link>
-      </div>
+      </p>
     </form>
   );
 }
@@ -231,22 +174,14 @@ type FieldProps = {
 function Field({ label, value, onChange, error, type = "text" }: FieldProps) {
   return (
     <label className="grid gap-1.5">
-      <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#6e6266]">
-        {label}
-      </span>
+      <span className="text-sm font-medium text-neutral-700">{label}</span>
       <input
         type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className={`min-h-13 rounded-[18px] border bg-white px-4 text-sm font-semibold text-[#242124] outline-none transition ${
-          error
-            ? "border-[#ec407a]"
-            : "border-[#f0d2db] focus:border-[#ec407a]"
-        }`}
+        className="input"
       />
-      <span className="min-h-4 text-[11px] font-bold text-[#b03b56]">
-        {error ?? ""}
-      </span>
+      {error ? <span className="text-xs text-red-600">{error}</span> : null}
     </label>
   );
 }

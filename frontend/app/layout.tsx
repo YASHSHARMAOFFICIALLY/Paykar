@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Paykar | Clear Wallet Transfers",
-  description:
-    "A polished wallet experience for signup, balance checks, user search, and protected money transfers.",
+  title: "Paykar",
+  description: "Wallet signup, balance, user search, and transfer app.",
 };
 
 export default function RootLayout({

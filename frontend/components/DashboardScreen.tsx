@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BalanceCard } from "./BalanceCard";
-import { TransactionList } from "./TransactionList";
 import { TransferBox } from "./TransferBox";
 
 type SearchUser = {
@@ -12,30 +11,6 @@ type SearchUser = {
   firstname: string;
   lastname: string;
 };
-
-const activity = [
-  {
-    id: "1",
-    title: "Sent to @yashpay",
-    description: "Rs 1,200",
-    tone: "success" as const,
-    timestamp: "09:24",
-  },
-  {
-    id: "2",
-    title: "Received from @sana.dev",
-    description: "Rs 880",
-    tone: "info" as const,
-    timestamp: "Yesterday",
-  },
-  {
-    id: "3",
-    title: "Transfer failed",
-    description: "Rs 5,000",
-    tone: "error" as const,
-    timestamp: "Apr 16",
-  },
-];
 
 export function DashboardScreen() {
   const [token, setToken] = useState("");
@@ -47,16 +22,12 @@ export function DashboardScreen() {
   const [selectedUser, setSelectedUser] = useState<SearchUser | null>(null);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [amount, setAmount] = useState("1200");
+  const [amount, setAmount] = useState("");
   const [transferLoading, setTransferLoading] = useState(false);
   const [transferMessage, setTransferMessage] = useState<string | null>(null);
   const [transferError, setTransferError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
     const savedToken = window.localStorage.getItem("paykar_token") ?? "";
     setToken(savedToken);
   }, []);
@@ -98,12 +69,11 @@ export function DashboardScreen() {
     setBalanceError(null);
 
     try {
-      const response = await fetch(`/api/account/balance`, {
+      const response = await fetch("/api/account/balance", {
         headers: {
           authorization: `Bearer ${authToken}`,
         },
       });
-
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
@@ -126,7 +96,6 @@ export function DashboardScreen() {
       const response = await fetch(`/api/user/search?query=${encodeURIComponent(searchQuery)}`, {
         signal,
       });
-
       const data = await response.json().catch(() => []);
 
       if (!response.ok) {
@@ -153,12 +122,12 @@ export function DashboardScreen() {
     setTransferError(null);
 
     if (!token) {
-      setTransferError("Sign in first so a token is available.");
+      setTransferError("Sign in first.");
       return;
     }
 
     if (!selectedUser) {
-      setTransferError("Select a receiver first.");
+      setTransferError("Select a receiver.");
       return;
     }
 
@@ -172,7 +141,7 @@ export function DashboardScreen() {
     setTransferLoading(true);
 
     try {
-      const response = await fetch(`/api/account/transfer`, {
+      const response = await fetch("/api/account/transfer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -183,7 +152,6 @@ export function DashboardScreen() {
           amount: numericAmount,
         }),
       });
-
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
@@ -191,6 +159,7 @@ export function DashboardScreen() {
       }
 
       setTransferMessage(data?.message ?? "Transfer successful");
+      setAmount("");
       await loadBalance(token);
     } catch (error) {
       setTransferError(error instanceof Error ? error.message : "Transfer failed");
@@ -199,187 +168,87 @@ export function DashboardScreen() {
     }
   }
 
-  const contacts = results.slice(0, 3).map((user) => ({
-    username: user.username,
-    name: `${user.firstname} ${user.lastname}`,
-  }));
-  const hasSelection = Boolean(selectedUser);
-  const selectedFirstName = selectedUser?.firstname ?? "someone";
-  const heroTone = hasSelection
-    ? "from-[#fff4f8] via-[#fff8fb] to-[#eefaf5] border-[#f1d9e1]"
-    : "from-[#fff6fa] via-white to-[#fff1f6] border-[#efd6df]";
-  const heroTitle = hasSelection
-    ? `Pay ${selectedFirstName}`
-    : "Move money";
-  const heroSubtitle = hasSelection ? "with confidence." : "without noise.";
-  const successRate = transferError ? "91.8%" : transferMessage ? "99.2%" : "98.4%";
-  const volumeStat = balance !== null ? `Rs ${balance}` : "Rs --";
-  const activityCount = transferMessage ? "1 active" : `${results.length || 0} live`;
+  function signOut() {
+    window.localStorage.removeItem("paykar_token");
+    setToken("");
+    setBalance(null);
+  }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#fdf6f9] text-[#1f1f1f] transition-colors duration-300">
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.34),_transparent_34%),linear-gradient(180deg,_#fffafb_0%,_#fdf6f9_52%,_#ffffff_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_center,_rgba(244,114,158,0.18),_transparent_44%)]" />
-      </div>
-
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/70 bg-white/60 backdrop-blur-md">
-        <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8">
-          <Link href="/" className="text-xl font-bold text-[#242124]">
+    <main className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-[#ead8d0] bg-white/75 backdrop-blur">
+        <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
+          <Link href="/" className="font-semibold">
             Paykar
           </Link>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/signin"
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#efc4d0] bg-white/70 px-5 text-sm font-bold text-[#242124] shadow-[0_10px_30px_rgba(18,18,18,0.08)] transition hover:-translate-y-0.5"
-            >
+          {token ? (
+            <button type="button" onClick={signOut} className="button-secondary">
+              Sign out
+            </button>
+          ) : (
+            <Link href="/signin" className="button-secondary">
               Sign in
             </Link>
-          </div>
+          )}
         </nav>
       </header>
 
-      <section className="mx-auto max-w-7xl px-6 pb-24 pt-28 lg:px-8">
-        <div className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="grid gap-8">
-            <div
-              className={`relative overflow-hidden rounded-[40px] border bg-gradient-to-br p-8 text-[#242124] shadow-[0_28px_90px_rgba(18,18,18,0.10)] lg:p-10 ${heroTone}`}
-            >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(248,180,198,0.24),_transparent_36%),radial-gradient(circle_at_bottom_right,_rgba(188,231,213,0.24),_transparent_34%)]" />
-              <div className="relative z-10">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#c34372]">
-                  Dashboard
-                </p>
-                <h1 className="mt-5 text-4xl font-extrabold leading-[0.94] text-[#242124] lg:text-6xl">
-                  {heroTitle}
-                  <br />
-                  {heroSubtitle}
-                </h1>
-                <p className="mt-4 max-w-xl text-sm font-semibold leading-6 text-[#6d5f64]">
-                  {hasSelection
-                    ? `Receiver selected: @${selectedUser?.username}. Review the amount and send when ready.`
-                    : "Search a receiver, review your balance, and complete transfers from one focused screen."}
-                </p>
-                <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                  <HeroStat label="Balance" value={volumeStat} accent="rose" />
-                  <HeroStat label="Success" value={successRate} accent="mint" />
-                  <HeroStat label="Search" value={activityCount} accent="amber" />
-                </div>
-              </div>
+      <section className="mx-auto grid max-w-5xl gap-6 px-6 py-8">
+        <div className="panel bg-white/90">
+          <p className="eyebrow">
+            Dashboard
+          </p>
+          <div className="mt-4 flex flex-wrap items-end justify-between gap-5">
+            <div>
+              <h1 className="text-4xl font-semibold text-[#221b19]">Wallet</h1>
+              <p className="muted mt-3 max-w-xl text-sm leading-6">
+                Check your balance, find a receiver, and send money from one
+                place.
+              </p>
             </div>
-
-            <BalanceCard
-              balance={balance}
-              loading={balanceLoading}
-              error={balanceError}
-              hasToken={Boolean(token)}
-              onRefresh={() => {
-                if (token) {
-                  void loadBalance(token);
-                }
-              }}
-            />
-
-            <TransferBox
-              query={query}
-              onQueryChange={(value) => {
-                setQuery(value);
-                setTransferMessage(null);
-                setTransferError(null);
-              }}
-              results={results}
-              selectedUser={selectedUser}
-              onSelectUser={setSelectedUser}
-              searchLoading={searchLoading}
-              searchError={searchError}
-              amount={amount}
-              onAmountChange={setAmount}
-              onSubmit={() => {
-                void handleTransfer();
-              }}
-              loading={transferLoading}
-              message={transferMessage}
-              error={transferError}
-            />
-          </div>
-
-          <div className="grid gap-8">
-            <div className="rounded-[34px] border border-white/80 bg-gradient-to-br from-white/80 via-[#fffafb] to-[#fff3f7] p-7 shadow-[0_20px_60px_rgba(18,18,18,0.08)] backdrop-blur-md lg:p-8">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ec407a]">
-                    Contacts
-                  </p>
-                  <h2 className="mt-4 text-3xl font-extrabold text-[#242124]">
-                    Frequent
-                  </h2>
-                </div>
-              </div>
-              <div className="mt-8 grid gap-3">
-                {contacts.map((contact, index) => (
-                  <div
-                    key={contact.username}
-                    className={`flex items-center justify-between rounded-[22px] border px-5 py-4 ${
-                      index === 0
-                        ? "border-[#ec407a]/25 bg-[#fff1f6]"
-                        : "border-[#f2d2dc] bg-[#fffafb]"
-                    }`}
-                  >
-                    <div>
-                      <p className="text-base font-extrabold text-[#242124]">
-                        @{contact.username}
-                      </p>
-                      <p className="mt-1 text-sm font-semibold text-[#7b6f73]">
-                        {contact.name}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      className="rounded-full border border-[#efc4d0] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-[#242124] transition hover:bg-[#fff2f6]"
-                    >
-                      Pay
-                    </button>
-                  </div>
-                ))}
-                {!contacts.length ? (
-                  <p className="rounded-[22px] border border-[#f2d2dc] bg-[#fffafb] px-5 py-4 text-sm font-semibold text-[#7b6f73]">
-                    Search for users to load live contacts from the backend.
-                  </p>
-                ) : null}
-              </div>
+            <div className="rounded-lg border border-[#d6eadf] bg-[#f2fbf6] px-4 py-3">
+              <p className="text-xs text-[#66766e]">Session</p>
+              <p className="mt-1 font-semibold text-[#1f3d31]">
+                {token ? "Signed in" : "Signed out"}
+              </p>
             </div>
-
-            <TransactionList items={activity} />
           </div>
         </div>
+
+        <BalanceCard
+          balance={balance}
+          loading={balanceLoading}
+          error={balanceError}
+          hasToken={Boolean(token)}
+          onRefresh={() => {
+            if (token) {
+              void loadBalance(token);
+            }
+          }}
+        />
+
+        <TransferBox
+          query={query}
+          onQueryChange={(value) => {
+            setQuery(value);
+            setTransferMessage(null);
+            setTransferError(null);
+          }}
+          results={results}
+          selectedUser={selectedUser}
+          onSelectUser={setSelectedUser}
+          searchLoading={searchLoading}
+          searchError={searchError}
+          amount={amount}
+          onAmountChange={setAmount}
+          onSubmit={() => {
+            void handleTransfer();
+          }}
+          loading={transferLoading}
+          message={transferMessage}
+          error={transferError}
+        />
       </section>
     </main>
-  );
-}
-
-function HeroStat({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: string;
-  accent: "rose" | "mint" | "amber";
-}) {
-  const accentClasses = {
-    rose: "from-[#fff4f8] to-white",
-    mint: "from-[#f2fbf6] to-white",
-    amber: "from-[#fff8ef] to-white",
-  };
-
-  return (
-    <div
-      className={`rounded-[26px] border border-white/70 bg-gradient-to-br px-4 py-4 shadow-[0_12px_30px_rgba(17,17,17,0.05)] backdrop-blur-sm ${accentClasses[accent]}`}
-    >
-      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#8d7d83]">
-        {label}
-      </p>
-      <p className="mt-2 text-lg font-extrabold text-[#242124]">{value}</p>
-    </div>
   );
 }

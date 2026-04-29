@@ -1,17 +1,29 @@
+import Link from "next/link";
 import { AuthForm } from "./AuthForm";
-import { AuthShowcase } from "./AuthShowcase";
 
 export function AuthScreen({ mode }: { mode: "signin" | "signup" }) {
   return (
-    <main className="min-h-screen overflow-hidden bg-[#fdf6f9] text-[#1f1f1f] transition-colors duration-300">
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(248,180,198,0.34),_transparent_34%),linear-gradient(180deg,_#fffafb_0%,_#fdf6f9_52%,_#ffffff_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_center,_rgba(244,114,158,0.2),_transparent_44%)]" />
-      </div>
+    <main className="min-h-screen bg-background text-foreground">
+      <section className="mx-auto grid min-h-screen max-w-5xl items-center gap-8 px-6 py-12 lg:grid-cols-[0.85fr_1fr]">
+        <div className="hidden lg:block">
+          <Link href="/" className="eyebrow">
+            Paykar
+          </Link>
+          <h1 className="mt-4 text-4xl font-bold tracking-tight">
+            {mode === "signin" ? "Welcome back." : "Create your wallet."}
+          </h1>
+          <p className="muted mt-4 max-w-sm leading-7">
+            Sign in to view your wallet, check your balance, search receivers,
+            and send money.
+          </p>
+        </div>
 
-      <section className="mx-auto grid min-h-screen max-w-7xl items-center gap-8 px-6 py-8 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
-        <AuthShowcase mode={mode} />
-        <AuthForm mode={mode} />
+        <div>
+          <Link href="/" className="mb-6 inline-flex text-sm font-semibold text-neutral-500 lg:hidden">
+            Paykar
+          </Link>
+          <AuthForm mode={mode} />
+        </div>
       </section>
     </main>
   );
